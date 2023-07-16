@@ -41,21 +41,18 @@ public class PersonService : IPersonService
         using (var unitOfWork = _unitOfWorkFactory())
         {
             var person = _mapper.Map<Person>(model);
+            unitOfWork.PersonRepository.Insert(person);
+            await unitOfWork.CommitAsync();
+
             var config = new MapperConfiguration(cfg =>
             {
                 cfg.CreateMap<Address, AddressModel>(); 
                 cfg.CreateMap<Accreditation, AccredetationModel>();
-                cfg.CreateMap<Person, PersonGetModel>()
-                    .ForMember(dest => dest.AddressModel, opt => opt.MapFrom(src => src.Address))
-                    .ForMember(dest => dest.AccredetationModel, opt => opt.MapFrom(src => src.Accreditation));
+                cfg.CreateMap<Person, PersonGetModel>();
             });
 
             var mapper = config.CreateMapper();
-
-            unitOfWork.PersonRepository.Insert(person);
-            await unitOfWork.CommitAsync();
-
-            return _mapper.Map<PersonGetModel>(person);
+            return _mapper.Map<PersonGetModel>(mapper);
         }
     }
 
