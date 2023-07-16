@@ -13,17 +13,17 @@ namespace Services.Services
 {
     public class AddressService : IAddressService
     {
-        private IUnitOfWorkFactory _unitOfWorkFactory { get; }
+        private Func<IUnitOfWork> _unitOfWorkFactory { get; }
         private readonly IMapper _mapper;
 
-        public AddressService(IUnitOfWorkFactory unitOfWorkFactory, IMapper mapper)
+        public AddressService(Func<IUnitOfWork> unitOfWorkFactory, IMapper mapper)
         {
             _unitOfWorkFactory = unitOfWorkFactory;
             _mapper = mapper;
         }
         public async Task<AddressGetModel> CreateAddressAsync(int personId, AddressModel model)
         {
-            using (var unitOfWork = _unitOfWorkFactory.Create())
+            using (var unitOfWork = _unitOfWorkFactory())
             {
                 var address = await unitOfWork.PersonRepository.GetByIdAsync(personId);
                 if (address != null)
@@ -39,7 +39,7 @@ namespace Services.Services
 
         public async Task<AddressGetModel> GetAddressAsync(int id)
         {
-            using (var unitOfWork = _unitOfWorkFactory.Create())
+            using (var unitOfWork = _unitOfWorkFactory())
             {
                 var address = await unitOfWork.PersonRepository.GetByIdAsync(id);
                 return _mapper.Map<AddressGetModel>(address);
@@ -48,7 +48,7 @@ namespace Services.Services
 
         public async Task<AddressGetModel> UpdateAddressAsync(int personId, AddressModel model)
         {
-            using (var unitOfWork = _unitOfWorkFactory.Create())
+            using (var unitOfWork = _unitOfWorkFactory())
             {
 
                 var person = await unitOfWork.PersonRepository.GetByIdAsync(personId);

@@ -1,10 +1,12 @@
 ﻿using Abstraction.Services;
 using Abstraction.UnitOfWork;
+using AutoMapper;
 using Database.Infrastructure;
 using Database.UnitOfWork;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
+using Services.Mapper;
 using Services.Services;
 using System.Reflection;
 using System.Text.Json.Serialization;
@@ -67,7 +69,15 @@ public class Startup
         });
 
         services.AddTransient<IPersonService, PersonService>();
-        services.AddTransient<IUnitOfWorkFactory, UnitOfWorkFactory>();
+
+        services.AddTransient<IUnitOfWork, UnitOfWork>();
+        services.AddSingleton<Func<IUnitOfWork>>(x => () => x.GetService<IUnitOfWork>());
+
+        services.AddSingleton(context => new MapperConfiguration(cfg =>
+        {
+            cfg.AddProfile<ModelToEntityMapperProfile>();
+            cfg.AddProfile<EntityToGetModelMapperProfile>();
+        }));
 
         // to do configure mapper
 
