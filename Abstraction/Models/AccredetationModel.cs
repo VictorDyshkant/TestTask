@@ -1,12 +1,10 @@
 ﻿using Abstraction.Entities.Enums;
 
-namespace Abstraction.Entities;
+namespace Abstraction.Models;
 
-public class Accreditation : Entity<int>
+public class AccredetationModel
 {
     public Status Status { get; set; }
 
     public DateOnly Expires { get; set; }
-
-    public Person Person { get; set; } = null!;
 }

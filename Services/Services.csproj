@@ -14,4 +14,8 @@
     <ProjectReference Include="..\Abstraction\Abstraction.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Exceptions\" />
+  </ItemGroup>
+
 </Project>
