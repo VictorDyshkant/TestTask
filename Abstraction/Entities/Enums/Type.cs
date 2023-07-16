@@ -1,4 +1,4 @@
-﻿namespace Abstraction.Entities;
+﻿namespace Abstraction.Entities.Enums;
 
 public enum Type
 {

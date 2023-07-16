@@ -63,7 +63,7 @@ public class PersonService : IPersonService
             var person = await unitOfWork.PersonRepository.GetByIdAsync(id);
             if (person == null)
             {
-                throw new Exception($"Person with id = {id} was not found.");
+                throw new NotFoundException($"Person with id = {id} was not found.");
             }
 
             unitOfWork.PersonRepository.Delete(id);

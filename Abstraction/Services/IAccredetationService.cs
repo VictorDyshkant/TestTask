@@ -7,5 +7,6 @@ public interface IAccredetationService
 {
     Task<AccredetationGetModel> AssigneAccredetation(int personId, AccredetationModel model);
 
-    Task UnAssigneAccredetation(int personId, AccredetationModel model);
+    // TODO method should delete Accredetation, person.Accredetation == null
+    Task UnAssigneAccredetation(int personId);
 }
