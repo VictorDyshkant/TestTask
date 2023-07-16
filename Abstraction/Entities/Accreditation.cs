@@ -6,7 +6,7 @@ public class Accreditation : Entity<int>
 {
     public Status Status { get; set; }
 
-    public DateOnly Expires { get; set; }
+    public DateTime Expires { get; set; }
 
-    public Person Person { get; set; } = null!;
+    public virtual Person Person { get; set; } = null!;
 }

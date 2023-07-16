@@ -5,9 +5,11 @@ namespace Abstraction.UnitOfWork;
 
 public interface IUnitOfWork : IDisposable
 {
-    IRepository<Person, int> PersonRepository { get; }
+    public IRepository<Person, int> PersonRepository { get; }
 
-    //void BeginTransaction();
+    public IRepository<Accreditation, int> AccredetationRepository { get; }
+
+    public IRepository<Address, int> AddressRepository { get; }
 
     Task CommitAsync();
 }

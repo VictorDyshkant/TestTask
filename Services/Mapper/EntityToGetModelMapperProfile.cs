@@ -1,9 +1,9 @@
 ﻿using Abstraction.Entities;
 using Abstraction.Models;
 using AutoMapper;
+
 namespace Services.Mapper;
 
-// TODO provide correct mapping 
 public class EntityToGetModelMapperProfile : Profile
 {
     public EntityToGetModelMapperProfile()

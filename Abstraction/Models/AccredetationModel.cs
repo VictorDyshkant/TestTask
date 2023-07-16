@@ -7,5 +7,5 @@ public class AccredetationModel
 {
     public Status Status { get; set; }
 
-    public DateOnly Expires { get; set; }
+    public DateTime Expires { get; set; }
 }

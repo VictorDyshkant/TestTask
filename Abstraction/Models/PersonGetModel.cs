@@ -19,8 +19,8 @@ public class PersonGetModel
     public string WebSite { get; set; }
 
     // TODO needed to be maped where person is returned
-    public AccredetationModel AccredetationModel { get; set;}
+    public AccredetationGetModel AccredetationModel { get; set;}
 
     // TODO needed to be maped where person is returned
-    public AddressModel AddressModel { get; set;}
+    public AddressGetModel AddressModel { get; set;}
 }

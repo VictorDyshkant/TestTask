@@ -43,12 +43,6 @@ public class PeopleController : BaseController
     public async Task<IActionResult> GetUserByIdAsync(int id)
     {
         var person = await _personService.GetPersonAsync(id);
-
-        if (person == null)
-        {
-            return NotFound();
-        }
-
         return Ok(person);
     }
 

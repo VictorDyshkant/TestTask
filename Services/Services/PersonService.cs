@@ -20,19 +20,14 @@ public class PersonService : IPersonService
 
     public async Task<PersonGetModel> GetPersonAsync(int id)
     {
-        using(var unitOfWork = _unitOfWorkFactory())
+        using (var unitOfWork = _unitOfWorkFactory())
         {
             var person = await unitOfWork.PersonRepository.GetByIdAsync(id);
-            var config = new MapperConfiguration(cfg =>
+            if (person == null)
             {
-                cfg.CreateMap<Address, AddressModel>();
-                cfg.CreateMap<Accreditation, AccredetationModel>();
-            });
-
-            IMapper mapper = config.CreateMapper();
-
-
-            return _mapper.Map<PersonGetModel>(person);
+                throw new NotFoundException($"Person with id = {id} was not found.");
+            }
+            return Map(person);
         }
     }
 
@@ -44,15 +39,7 @@ public class PersonService : IPersonService
             unitOfWork.PersonRepository.Insert(person);
             await unitOfWork.CommitAsync();
 
-            var config = new MapperConfiguration(cfg =>
-            {
-                cfg.CreateMap<Address, AddressModel>(); 
-                cfg.CreateMap<Accreditation, AccredetationModel>();
-                cfg.CreateMap<Person, PersonGetModel>();
-            });
-
-            var mapper = config.CreateMapper();
-            return _mapper.Map<PersonGetModel>(mapper);
+            return _mapper.Map<PersonGetModel>(person);
         }
     }
 
@@ -104,5 +91,15 @@ public class PersonService : IPersonService
 
             return _mapper.Map<PersonGetModel>(person);
         }
+    }
+
+    private PersonGetModel Map(Person person)
+    {
+        var result = _mapper.Map<PersonGetModel>(person);
+        if (person.Accreditation is not null)
+            result.AccredetationModel = _mapper.Map<AccredetationGetModel>(person.Accreditation);
+        if (person.Address is not null)
+            result.AddressModel = _mapper.Map<AddressGetModel>(person.Address);
+        return result;
     }
 }

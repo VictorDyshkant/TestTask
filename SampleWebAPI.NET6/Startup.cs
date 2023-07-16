@@ -65,10 +65,18 @@ public class Startup
         services.AddDbContextPool<CustomDbContext>(optionBuilder =>
         {
             var connectionString = Configuration.GetSection("ConnectionStrings").GetValue<string>("Default");
-            optionBuilder.UseSqlite(connectionString);
+            optionBuilder.UseLazyLoadingProxies().UseSqlite(connectionString);
+        });
+
+        services.AddDbContextFactory<CustomDbContext>(optionBuilder =>
+        {
+            var connectionString = Configuration.GetSection("ConnectionStrings").GetValue<string>("Default");
+            optionBuilder.UseLazyLoadingProxies().UseSqlite(connectionString);
         });
 
         services.AddTransient<IPersonService, PersonService>();
+        services.AddTransient<IAccredetationService, AccredetationService>();
+        services.AddTransient<IAddressService, AddressService>();
 
         services.AddTransient<IUnitOfWork, UnitOfWork>();
         services.AddSingleton<Func<IUnitOfWork>>(x => () => x.GetService<IUnitOfWork>());
@@ -77,7 +85,7 @@ public class Startup
         {
             cfg.AddProfile<ModelToEntityMapperProfile>();
             cfg.AddProfile<EntityToGetModelMapperProfile>();
-        }));
+        }).CreateMapper());
 
         // to do configure mapper
 

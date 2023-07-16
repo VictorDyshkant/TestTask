@@ -12,5 +12,5 @@ public class Address : Entity<int>
     
     public string Country { get; set; }
     
-    public Person Person { get; set; } = null!;
+    public virtual Person Person { get; set; } = null!;
 }

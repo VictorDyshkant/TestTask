@@ -1,13 +1,9 @@
-﻿using Abstraction.Exceptions;
+﻿using Abstraction.Entities;
+using Abstraction.Exceptions;
 using Abstraction.Models;
 using Abstraction.Services;
 using Abstraction.UnitOfWork;
 using AutoMapper;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Services.Services
 {
@@ -21,37 +17,67 @@ namespace Services.Services
             _unitOfWorkFactory = unitOfWorkFactory;
             _mapper = mapper;
         }
-        public async Task<AccredetationGetModel> AssigneAccredetation(int personId, AccredetationModel model)
+
+        public async Task AssigneAccredetation(int personId, AccredetationModel model)
         {
             using (var unitOfWork = _unitOfWorkFactory())
             {
                 var person = await unitOfWork.PersonRepository.GetByIdAsync(personId);
-                var acc = person.Accreditation;
                 if (person == null)
                 {
                     throw new NotFoundException($"Person with id = {personId} was not found.");
                 }
-                acc.Status = model.Status;
-                acc.Expires = model.Expires;
+
+                if (person.Accreditation != null)
+                {
+                    throw new InvalidOperationException("Accreditation already assigend.");
+                }
+
+                person.Accreditation = _mapper.Map<Accreditation>(model);
 
                 await unitOfWork.CommitAsync();
-
-                return _mapper.Map<AccredetationGetModel>(person);
             }
         }
 
-        public async Task UnAssigneAccredetation(int personId, AccredetationModel model)
+        public async Task UnAssigneAccredetation(int personId)
         {
             using (var unitOfWork = _unitOfWorkFactory())
             {
                 var person = await unitOfWork.PersonRepository.GetByIdAsync(personId);
-                var acc = person.Accreditation;
                 if (person == null)
                 {
                     throw new Exception($"Person with id = {personId} was not found.");
                 }
 
-                unitOfWork.PersonRepository.Delete(personId);
+                if (person.Accreditation != null)
+                {
+                    throw new InvalidOperationException("Accreditation is not assigend on current person.");
+                }
+
+                unitOfWork.AccredetationRepository.Delete(person.Accreditation.Id);
+                await unitOfWork.CommitAsync();
+            }
+        }
+
+        public async Task UpdateAccredetation(int personId, AccredetationModel model)
+        {
+            using (var unitOfWork = _unitOfWorkFactory())
+            {
+                var person = await unitOfWork.PersonRepository.GetByIdAsync(personId);
+                if (person == null)
+                {
+                    throw new NotFoundException($"Person with id = {personId} was not found.");
+                }
+
+                if (person.Accreditation != null)
+                {
+                    throw new InvalidOperationException("Accreditation already assigend.");
+                }
+
+                person.Accreditation.Status = model.Status;
+                person.Accreditation.Expires = model.Expires;
+
+                unitOfWork.AccredetationRepository.Update(person.Accreditation);
                 await unitOfWork.CommitAsync();
             }
         }

@@ -8,6 +8,7 @@ public partial class CustomDbContext : DbContext
     public CustomDbContext(DbContextOptions<CustomDbContext> options)
         : base(options)
     {
+
     }
 
     public virtual DbSet<Person> Person { get; set; }
@@ -26,11 +27,11 @@ public partial class CustomDbContext : DbContext
             entity.HasKey(person => person.Id);
             entity.HasOne(person => person.Address)
                   .WithOne(address => address.Person)
-                  .HasForeignKey<Address>("AddressId");
+                  .HasForeignKey<Person>("AddressId");
 
             entity.HasOne(person => person.Accreditation)
                   .WithOne(accreditation => accreditation.Person)
-                  .HasForeignKey<Accreditation>("AccreditationId");
+                  .HasForeignKey<Person>("AccreditationId");
         });
 
         modelBuilder.Entity<Address>(entity =>

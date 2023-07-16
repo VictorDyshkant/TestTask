@@ -21,13 +21,17 @@ public class UnitOfWork : IUnitOfWork
     {
         _dbContext = dbContextFactory.CreateDbContext();
         PersonRepository = new GenericRepository<Person, int>(_dbContext);
+        AccredetationRepository = new GenericRepository<Accreditation, int>(_dbContext);
+        AddressRepository = new GenericRepository<Address, int>(_dbContext);
 
         //CategoryRepository = categoryRepositoryFactory(_session);
         //ProductRepository = productRepositoryFactory(_session);
         //StoreRepository = storeRepositoryFactory(_session);
     }
 
-    public IRepository<Person, int> PersonRepository {get; }
+    public IRepository<Person, int> PersonRepository { get; }
+    public IRepository<Accreditation, int> AccredetationRepository { get; }
+    public IRepository<Address, int> AddressRepository { get; }
 
     //public void BeginTransaction()
     //{
