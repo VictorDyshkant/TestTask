@@ -3,9 +3,9 @@ namespace Abstraction.Services;
 
 public interface IAddressService
 {
-    Task CreateAddressAsync(int personId, AddressModel model);
+    Task<AddressGetModel> CreateAddressAsync(int personId, AddressModel model);
 
-    Task UpdateAddressAsync(int personId, AddressModel model);
+    Task<AddressGetModel> UpdateAddressAsync(int personId, AddressModel model);
 
-    Task<AddressModel> GetAddressAsync(int id);
+    Task<AddressGetModel> GetAddressAsync(int id);
 }
